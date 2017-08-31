@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>learn Resources</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+<div style="text-align: center;margin:0 auto;width: 1000px; ">
+    <h1>用户列表</h1>
+    <table width="100%" border="1" cellspacing="1" cellpadding="0">
+        <tr>
+            <td>姓名</td>
+            <td>年龄</td>
+            <td>部门</td>
+            <td>地址</td>
+        </tr>
+        <!--/*@thymesVar id="userList" type=""*/-->
+        <tr th:each="user : ${userList}">
+            <td th:text="${user.name}">测试1</td>
+            <td th:text="${user.age}">22</td>
+            <td th:text="${user.department}">部门1</td>
+            <td th:text="${user.address}">测试地址1</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

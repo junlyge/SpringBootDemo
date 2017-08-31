@@ -1,0 +1,4 @@
+示例demo:
+
+1.引入了spring boot+thymeleaf+security+bootstrap;
+    模拟了一个简单的用户登录界面及登录之后能访问的相应页面权限简单控制.
