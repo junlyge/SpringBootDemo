@@ -2,14 +2,21 @@ package com.lj.test.demo.model;
 
 public class User {
     private String name;
+    private String password;
     private String department;
     private Integer age;
     private String address;
 
     public User() {}
 
-    public User(String name, String department, Integer age, String address) {
+    public User(String name, String password){
         this.name = name;
+        this.password = password;
+    }
+
+    public User(String name, String password,String department, Integer age, String address) {
+        this.name = name;
+        this.password = password;
         this.department = department;
         this.age = age;
         this.address = address;
@@ -21,6 +28,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getDepartment() {

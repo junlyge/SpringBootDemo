@@ -34,9 +34,9 @@ public class DemoApplication {
     @RequestMapping("/template")
     public ModelAndView template(){
         List<User> userList = new ArrayList<User>();
-        User user = new User("张三","HR",29,"深圳宝安区232号");
+        User user = new User("张三","123456","HR",29,"深圳宝安区232号");
         userList.add(user);
-        user = new User("李四","Core enginer",32,"广州天河区22号");
+        user = new User("李四","666666","Core engginer",32,"广州天河区22号");
         userList.add(user);
         ModelAndView modelAndView = new ModelAndView("/template");
         modelAndView.addObject("userList",userList);
