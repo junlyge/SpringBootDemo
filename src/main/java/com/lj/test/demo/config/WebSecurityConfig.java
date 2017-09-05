@@ -23,7 +23,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()                                    //配置安全策略
-                .antMatchers("/","/home","/css/**","/js/**").permitAll()       //定义'/','/home'及一些静态资源请求不需要验证
+                .antMatchers("/","/home","/hello","/css/**","/js/**").permitAll()       //定义'/','/home'及一些静态资源请求不需要验证
                 .anyRequest().authenticated()                           //其余的所有请求都需要验证
                 .and()
                 .formLogin()                                            //使用form表单登录
