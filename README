@@ -1,5 +1,8 @@
 示例demo:
 
-1.引入了spring boot+thymeleaf+security+bootstrap;
+1.2017-09-04 引入了spring boot+thymeleaf+security+bootstrap;
     模拟了一个简单的用户登录界面及登录之后能访问的相应页面权限简单控制.
+2.2017-09-05 日志logback-spring.xml配置文件
+
+3.2017-09-07 引入druid datasource,使用jdbcTemplate/mybatis操作DB
 ...

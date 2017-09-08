@@ -9,12 +9,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
+import javax.sql.DataSource;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)      //开启方法权限校验
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     @Autowired
     private AccessDeniedHandler accessDeniedHandler;
+    @Autowired
+    private DataSource dataSource;
 
     /**
      * 定义安全策略
@@ -23,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()                                    //配置安全策略
-                .antMatchers("/","/home","/hello","/css/**","/js/**").permitAll()       //定义'/','/home'及一些静态资源请求不需要验证
+                .antMatchers("/","/home","/hello","/druid/**","/learn/**","/css/**","/js/**").permitAll()       //定义'/','/home'及一些静态资源请求不需要验证
                 .anyRequest().authenticated()                           //其余的所有请求都需要验证
                 .and()
                 .formLogin()                                            //使用form表单登录
@@ -48,14 +52,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         //inMemoryAuthentication 从内存中获取
-        auth.inMemoryAuthentication()
+        /*auth.inMemoryAuthentication()
                 .withUser("user")
                 .password("123456")
                 .roles("USER")
                 .and()
                 .withUser("admin")
                 .password("123456")
-                .roles("ADMIN");
+                .roles("ADMIN");*/
 
         //jdbcAuthentication从数据库中获取，但是默认是以security提供的表结构
         //usersByUsernameQuery 指定查询用户SQL
@@ -64,5 +68,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
         //注入userDetailsService，需要实现userDetailsService接口
         //auth.userDetailsService(userDetailsService);
+        auth.jdbcAuthentication().dataSource(dataSource).usersByUsernameQuery("select name, password, true from user where name = ?").authoritiesByUsernameQuery("select username, authority from authorities where username = ?");
     }
 }

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta charset="UTF-8" />
+    <title></title>
+    <div th:replace="fragments/header::header-css" />
+    <script type="text/javascript" th:src="@{/js/jquery-1.11.3/jquery.min.js}" ></script>
+    <script type="text/javascript">
+    $(function () {
+        var curPage = parseInt($("#curPage").val());
+        var totalPage = parseInt($("#totalPage").val());
+        console.log("curPage:"+curPage);
+        console.log("totalPage:"+totalPage);
+        if(curPage==1){
+            btnDisabled(true,"beforeBtn");
+        }else{
+            btnDisabled(false,"beforeBtn");
+        }
+        if(curPage==totalPage || totalPage==1){
+            btnDisabled(true,"afterBtn");
+        }else{
+            btnDisabled(false,"afterBtn");
+        }
+        $("#goBeforeBtn").click(function () {
+           if(curPage>1){
+               curPage = curPage-1;
+               $("#curPage").val(curPage);
+               submitFormData();
+           }
+        });
+        $("#goAfterBtn").click(function () {
+            curPage = curPage+1;
+            $("#curPage").val(curPage);
+            submitFormData();
+        });
+    });
+    function btnDisabled(disabled,btn) {
+        if(disabled){
+            if(btn=="beforeBtn"){
+                $("#goBeforeBtn").attr("disabled",true);
+            }else if(btn=="afterBtn"){
+                $("#goAfterBtn").attr("disabled",true);
+            }
+        }else{
+            if(btn=="beforeBtn"){
+                $("#goBeforeBtn").attr("disabled",false);
+            }else if(btn=="afterBtn"){
+                $("#goAfterBtn").attr("disabled",false);
+            }
+        }
+    }
+    function submitFormData() {
+        $("#searchForm").submit();
+    }
+
+    function pageSizeOnChangeEvent(val) {
+        $("#pageSize").val(val);
+        submitFormData();
+    }
+    </script>
+</head>
+<body>
+    <div th:replace="fragments/header::header" />
+    <div class="container">
+        <div class="starter-template">
+            <h1>用户列表</h1>
+            <form id="searchForm" action="/learn/list" method="post">
+                <input type="hidden" id="curPage" name="curPage" th:value="${page!=null}?${page.currentPage}:${param.curPage==null?1:param.curPage}" />
+                <input type="hidden" id="pageSize" name="pageSize" th:value="${param.pageSize==null?10:param.pageSize}" />
+                作者:<input type="text" name="author" th:value="${param.author}" />
+                <input type="submit" value="查询" />
+            </form>
+            <table width="100%" border="1" cellspacing="1" cellpadding="0">
+                <tr>
+                    <td>Id</td>
+                    <td>作者</td>
+                    <td>主题</td>
+                    <td>URL</td>
+                </tr>
+                <!--/*@thymesVar id="userList" type=""*/-->
+                <div th:if="${page!=null}">
+                <tr th:each="learnResource : ${page.list}">
+                    <td th:text="${learnResource.id}">1</td>
+                    <td th:text="${learnResource.author}">作者1</td>
+                    <td th:text="${learnResource.title}">主题1</td>
+                    <td th:text="${learnResource.url}">地址1</td>
+                </tr>
+                </div>
+                <div th:if="${page==null}">
+                    <tr><td colspan="4" style="text-align: center">当前没有记录...</td></tr>
+                </div>
+            </table>
+            <div th:if="${page!=null}">
+                <input type="hidden" id="totalPage" th:value="${page.totalPage}"  />
+                <p th:text="'当前第 '+ ${page.currentPage} +' 页 / 共 '+${page.totalPage} +'页 '+${page.pageSize}+ '条/页'" />
+                <select id="pageSizeSelect" onchange="pageSizeOnChangeEvent(this.value)">
+                    <option th:selected="${page.pageSize==5}">5</option>
+                    <option th:selected="${page.pageSize==10}">10</option>
+                    <option th:selected="${page.pageSize==20}">20</option>
+                </select>
+                <input type="button" value="<" title="上一页" id="goBeforeBtn" />
+                <input type="button" value=">" title="下一页" id="goAfterBtn" />
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
