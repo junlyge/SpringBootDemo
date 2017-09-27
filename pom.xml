@@ -48,6 +48,11 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
 		<!-- 数据库依赖 -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -93,13 +98,70 @@
 			<artifactId>commons-beanutils</artifactId>
 			<version>1.9.3</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+			<version>4.4.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.6</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>23.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
+		<!-- 将SpringBootDemo项目打包成SpringBootDemo.war自动部署到tomcat服务器的webapps目录下面 -->
+		<finalName>SpringBootDemo</finalName>
+		<!-- 利用cargo插件把项目部署到远程的tomcat容器中 -->
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.cargo</groupId>
+				<artifactId>cargo-maven2-plugin</artifactId>
+				<version>1.2.3</version>
+				<configuration>
+					<container>
+						<!-- 指明使用的tomcat服务器版本 -->
+						<containerId>tomcat7x</containerId>
+						<type>remote</type>
+					</container>
+					<configuration>
+						<type>runtime</type>
+						<cargo.remote.username>admin</cargo.remote.username>
+						<cargo.remote.password>123456</cargo.remote.password>
+						<cargo.tomcat.manager.url>http://localhost:8888/manager</cargo.tomcat.manager.url>
+					</configuration>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>deploy</phase>
+						<goals>
+							<goal>redeploy</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
