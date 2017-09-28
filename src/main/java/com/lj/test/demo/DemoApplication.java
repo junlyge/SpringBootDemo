@@ -6,7 +6,9 @@ import com.lj.test.demo.service.IProfileConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,7 +21,7 @@ import java.util.List;
 @RequestMapping("/demo")
 @SpringBootApplication
 @EnableConfigurationProperties({ConfigBean.class})
-public class DemoApplication {
+public class DemoApplication extends SpringBootServletInitializer {
     @Autowired
     ConfigBean configBean;
     @Autowired
@@ -47,5 +49,16 @@ public class DemoApplication {
 		SpringApplication.run(DemoApplication.class, args);
 	}
 
+    /**
+     * 外部容器部署的话，就不能依赖于Application的main函数了，
+     * 而是要以类似于web.xml文件配置的方式来启动Spring应用上下文，
+     * 此时我们需要在启动类中继承SpringBootServletInitializer并实现configure方法
+     * @param application
+     * @return
+     */
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(DemoApplication.class);
+    }
 
 }
