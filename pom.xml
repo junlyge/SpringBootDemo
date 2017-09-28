@@ -30,19 +30,20 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-			<exclusions>
+			<!--这里是为了部署到外部tomcat容器而排除了它自带的tomcat,直接执行main方法的话可以注释此段-->
+			<!--<exclusions>
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-tomcat</artifactId>
 				</exclusion>
-			</exclusions>
+			</exclusions>-->
 		</dependency>
-
-		<dependency>
+		<!--如果上面注释了排除tomcat这里也注释-->
+		<!--<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<scope>provided</scope>
-		</dependency>
+		</dependency>-->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -143,40 +144,40 @@
 		<!-- 将SpringBootDemo项目打包成SpringBootDemo.war自动部署到tomcat服务器的webapps目录下面 -->
 		<finalName>SpringBootDemo</finalName>
 		<!-- 利用cargo插件把项目部署到远程的tomcat容器中 -->
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
+	<plugins>
+		<plugin>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-maven-plugin</artifactId>
+		</plugin>
 
-			<plugin>
-				<groupId>org.codehaus.cargo</groupId>
-				<artifactId>cargo-maven2-plugin</artifactId>
-				<version>1.2.3</version>
+		<plugin>
+			<groupId>org.codehaus.cargo</groupId>
+			<artifactId>cargo-maven2-plugin</artifactId>
+			<version>1.2.3</version>
+			<configuration>
+				<container>
+					<!-- 指明使用的tomcat服务器版本 -->
+					<containerId>tomcat7x</containerId>
+					<type>remote</type>
+				</container>
 				<configuration>
-					<container>
-						<!-- 指明使用的tomcat服务器版本 -->
-						<containerId>tomcat7x</containerId>
-						<type>remote</type>
-					</container>
-					<configuration>
-						<type>runtime</type>
-						<cargo.remote.username>admin</cargo.remote.username>
-						<cargo.remote.password>123456</cargo.remote.password>
-						<cargo.tomcat.manager.url>http://localhost:8888/manager</cargo.tomcat.manager.url>
-					</configuration>
+					<type>runtime</type>
+					<cargo.remote.username>admin</cargo.remote.username>
+					<cargo.remote.password>123456</cargo.remote.password>
+					<cargo.tomcat.manager.url>http://localhost:8888/manager</cargo.tomcat.manager.url>
 				</configuration>
-				<executions>
-					<execution>
-						<phase>deploy</phase>
-						<goals>
-							<goal>redeploy</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+			</configuration>
+			<executions>
+				<execution>
+					<phase>deploy</phase>
+					<goals>
+						<goal>redeploy</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
+	</plugins>
+</build>
 
 
 </project>
